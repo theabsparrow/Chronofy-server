@@ -1,12 +1,13 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import config from './config';
-import router from './router';
+// import router from './router';
 import notFound from './middlewire/notFound';
+import globalErrorHandler from './middlewire/globalErrorHandler';
 
 const app = express();
-
 app.use(express.json());
+
 const corsOption = {
   origin: [
     'http://localhost:3000',
@@ -15,9 +16,9 @@ const corsOption = {
   ],
   credentials: true,
 };
-app.use(cors(corsOption));
 
-app.use('/api/v1', router);
+app.use(cors(corsOption));
+// app.use('/api/v1', router);
 
 const test = async (req: Request, res: Response) => {
   const message = `server is running on port ${config.port}`;
@@ -25,6 +26,6 @@ const test = async (req: Request, res: Response) => {
 };
 
 app.get('/', test);
-
+app.use(globalErrorHandler);
 app.use(notFound);
 export default app;
