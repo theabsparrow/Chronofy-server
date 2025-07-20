@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import config from './config';
-// import router from './router';
+import router from './router';
 import notFound from './middlewire/notFound';
 import globalErrorHandler from './middlewire/globalErrorHandler';
 
@@ -18,7 +18,7 @@ const corsOption = {
 };
 
 app.use(cors(corsOption));
-// app.use('/api/v1', router);
+app.use('/api/v1', router);
 
 const test = async (req: Request, res: Response) => {
   const message = `server is running on port ${config.port}`;
