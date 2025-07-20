@@ -1,0 +1,30 @@
+import express, { Request, Response } from 'express';
+import cors from 'cors';
+import config from './config';
+import router from './router';
+import notFound from './middlewire/notFound';
+
+const app = express();
+
+app.use(express.json());
+const corsOption = {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'http://localhost:5174',
+  ],
+  credentials: true,
+};
+app.use(cors(corsOption));
+
+app.use('/api/v1', router);
+
+const test = async (req: Request, res: Response) => {
+  const message = `server is running on port ${config.port}`;
+  res.send(message);
+};
+
+app.get('/', test);
+
+app.use(notFound);
+export default app;
