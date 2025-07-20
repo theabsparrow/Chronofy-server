@@ -15,6 +15,9 @@ const eventValidationSchema = z.object({
       error: (issue) =>
         issue.input === undefined ? 'Date is required' : 'date is not a string',
     })
+    .refine((val) => /^\d{4}-\d{2}-\d{2}$/.test(val), {
+      message: 'Date must be in YYYY-MM-DD format',
+    })
     .refine(
       (val) => {
         const date = new Date(val);
@@ -26,9 +29,19 @@ const eventValidationSchema = z.object({
         message: 'past date can`t be taken',
       },
     )
-    .refine((val) => /^\d{4}-\d{2}-\d{2}$/.test(val), {
-      message: 'Date must be in YYYY-MM-DD format',
-    }),
+    .refine(
+      (val) => {
+        const date = new Date(val);
+        const today = new Date();
+        const oneYearFromToday = new Date();
+        oneYearFromToday.setFullYear(today.getFullYear() + 1);
+        oneYearFromToday.setHours(0, 0, 0, 0);
+        return date <= oneYearFromToday;
+      },
+      {
+        message: 'you can fix schedule for max one year',
+      },
+    ),
   time: z
     .string({
       error: (issue) =>
