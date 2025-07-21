@@ -47,8 +47,40 @@ const getASingleEvent = async (id: string) => {
   return event;
 };
 
+const updateEvent = async (id: string, payload: Partial<TEvent>) => {
+  const index = events.findIndex((event) => event.id === id);
+  if (index === -1) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Event not found');
+  }
+  const existingEvent = events[index];
+  const updatedEvent = {
+    ...existingEvent,
+    ...payload,
+    updatedAt: new Date(),
+  };
+  if (!updatedEvent) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'faild to update event');
+  }
+  events[index] = updatedEvent;
+  return events[index];
+};
+
+const deleteEvent = async (id: string) => {
+  const index = events.findIndex((event) => event.id === id);
+  if (index === -1) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Event not found');
+  }
+  const deletedEvent = events.splice(index, 1);
+  if (!deletedEvent.length) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to delete event');
+  }
+  return deletedEvent[0];
+};
+
 export const eventService = {
   createEvent,
   getAllEvents,
   getASingleEvent,
+  updateEvent,
+  deleteEvent,
 };

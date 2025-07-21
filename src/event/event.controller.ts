@@ -33,7 +33,50 @@ const getAllEvents = catchAsync(
   },
 );
 
+const getASingleEvent = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const result = await eventService.getASingleEvent(id);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'event is retrived successfully',
+      data: result,
+    });
+  },
+);
+
+const updateEvent = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const payload = req.body;
+    const result = await eventService.updateEvent(id, payload);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'event is updated successfully',
+      data: result,
+    });
+  },
+);
+
+const deleteEvent = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const result = await eventService.deleteEvent(id);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'event is deleted successfully',
+      data: result,
+    });
+  },
+);
+
 export const eventController = {
   createEvent,
   getAllEvents,
+  getASingleEvent,
+  updateEvent,
+  deleteEvent,
 };

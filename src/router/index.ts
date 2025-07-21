@@ -11,4 +11,11 @@ router.post(
   eventController.createEvent,
 );
 router.get('/events', eventController.getAllEvents);
+router.get('/event/:id', eventController.getASingleEvent);
+router.put(
+  '/event/:id',
+  validateRequest(eventValidation.updateEventValidationSchema),
+  eventController.updateEvent,
+);
+router.delete('/event/:id', eventController.deleteEvent);
 export default router;
