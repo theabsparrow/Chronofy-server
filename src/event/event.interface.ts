@@ -9,13 +9,13 @@ export type TCategory =
   | 'Other';
 
 export type TEvent = {
-  id: string;
+  id?: string;
   title: string;
   date: string;
   time: string;
   notes?: string;
   archived: boolean;
   category: TCategory;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 };

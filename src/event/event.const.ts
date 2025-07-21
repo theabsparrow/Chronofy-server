@@ -10,3 +10,5 @@ export const categoryOptions: TCategory[] = [
   'Travel',
   'Other',
 ];
+
+export const searchableFields: string[] = ['title', 'category'];

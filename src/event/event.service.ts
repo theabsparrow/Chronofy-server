@@ -1,10 +1,11 @@
 import { TEvent } from './event.interface';
 import { v4 as uuidv4 } from 'uuid';
 import { categorizeEvent } from './event.utills';
-import { events } from './event.model';
+import EventModel, { events } from './event.model';
 import AppError from '../error/AppError';
 import { StatusCodes } from 'http-status-codes';
-import QueryBuilder from '../builder/QueryBuilder';
+import QueryBuilder, { QueryBuilderForDatabase } from '../builder/QueryBuilder';
+import { searchableFields } from './event.const';
 
 const createEvent = async (payload: TEvent) => {
   const { title, date, time, notes } = payload;
@@ -30,6 +31,21 @@ const createEvent = async (payload: TEvent) => {
   return events[events.length - 1];
 };
 
+const createEvenetInDatabase = async (payload: TEvent) => {
+  const eventCategory = categorizeEvent(
+    `${payload?.title} ${payload?.notes || ''}`,
+  );
+  if (!eventCategory) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'category did not generate');
+  }
+  payload.category = eventCategory;
+  const result = await EventModel.create(payload);
+  if (!result) {
+    throw new AppError(StatusCodes.BAD_REQUEST, `faild to create event`);
+  }
+  return result;
+};
+
 const getAllEvents = async (query: Record<string, unknown>) => {
   const eventQuery = new QueryBuilder(events, query).filter().sort();
   const result = eventQuery.getResult();
@@ -39,12 +55,37 @@ const getAllEvents = async (query: Record<string, unknown>) => {
   return result;
 };
 
+const getAllEventFromDatabase = async (query: Record<string, unknown>) => {
+  const filter: Record<string, unknown> = {};
+  filter.archived = false;
+  query = { ...query, ...filter };
+  const eventQuery = new QueryBuilderForDatabase(EventModel.find(), query)
+    .search(searchableFields)
+    .filter()
+    .sort()
+    .paginateQuery();
+  const result = await eventQuery.modelQuery;
+  const meta = await eventQuery.countTotal();
+  if (!result) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'event not found');
+  }
+  return { meta, result };
+};
+
 const getASingleEvent = async (id: string) => {
   const event = events.find((e) => e.id === id);
   if (!event) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Event not found');
   }
   return event;
+};
+
+const getASingleEventFromDatabase = async (id: string) => {
+  const result = await EventModel.findById(id);
+  if (!result) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Event not found');
+  }
+  return result;
 };
 
 const updateEvent = async (id: string, payload: Partial<TEvent>) => {
@@ -65,6 +106,20 @@ const updateEvent = async (id: string, payload: Partial<TEvent>) => {
   return events[index];
 };
 
+const updateEventFromdatabase = async (
+  id: string,
+  payload: Partial<TEvent>,
+) => {
+  const isEventExists = await EventModel.findById(id);
+  if (!isEventExists) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Event not found');
+  }
+  const result = await EventModel.findByIdAndUpdate(id, payload, { new: true });
+  if (!result) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to update event');
+  }
+};
+
 const deleteEvent = async (id: string) => {
   const index = events.findIndex((event) => event.id === id);
   if (index === -1) {
@@ -77,10 +132,27 @@ const deleteEvent = async (id: string) => {
   return deletedEvent[0];
 };
 
+const deleteEventFromdatabase = async (id: string) => {
+  const isEventExists = await EventModel.findById(id);
+  if (!isEventExists) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Event not found');
+  }
+  const result = await EventModel.findByIdAndDelete(id);
+  if (!result) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to delete event');
+  }
+  return null;
+};
+
 export const eventService = {
   createEvent,
   getAllEvents,
   getASingleEvent,
   updateEvent,
   deleteEvent,
+  createEvenetInDatabase,
+  getAllEventFromDatabase,
+  getASingleEventFromDatabase,
+  updateEventFromdatabase,
+  deleteEventFromdatabase,
 };
