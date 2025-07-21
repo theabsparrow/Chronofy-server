@@ -1,4 +1,12 @@
-export type TCategory = 'Work' | 'Personal' | 'Other';
+export type TCategory =
+  | 'Work'
+  | 'Personal'
+  | 'Health'
+  | 'Finance'
+  | 'Social'
+  | 'Study'
+  | 'Travel'
+  | 'Other';
 
 export type TEvent = {
   id: string;

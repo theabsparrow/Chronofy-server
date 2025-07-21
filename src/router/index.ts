@@ -10,5 +10,5 @@ router.post(
   validateRequest(eventValidation.eventValidationSchema),
   eventController.createEvent,
 );
-
+router.get('/events', eventController.getAllEvents);
 export default router;
