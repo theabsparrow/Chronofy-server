@@ -6,7 +6,7 @@ A simple event scheduling backend built with **TypeScript**, **Express.js**, and
 
 ## 🔗 Project Links
 
-- **🔴 Server Live**: https://chronofy-server.vercel.app/
+- **🔴 Server Live**: https://chronofy-server.vercel.app/api/v1
 - **🌐 Client Live**: [https://your-frontend-url.com](https://your-frontend-url.com)
 - **📦 Client GitHub Repo**: [https://github.com/your-username/event-scheduler-client](https://github.com/your-username/event-scheduler-client)
 

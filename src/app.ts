@@ -10,7 +10,7 @@ app.use(express.json());
 
 const corsOption = {
   origin: [
-    'http://localhost:3000',
+    'https://chronofy.vercel.app',
     'http://localhost:5173',
     'http://localhost:5174',
   ],
