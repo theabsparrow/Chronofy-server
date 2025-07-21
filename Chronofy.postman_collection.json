@@ -1,0 +1,125 @@
+{
+	"info": {
+		"_postman_id": "952eb8fb-cb29-4ce4-908e-210c9adcd131",
+		"name": "Chronofy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40778936"
+	},
+	"item": [
+		{
+			"name": "event",
+			"item": [
+				{
+					"name": "create event",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"title\": \"Vacation Planning\",\r\n    \"date\": \"2025-12-10\",\r\n    \"time\": \"20:00\",\r\n    \"notes\": \"Plan holiday trip details with family including travel and budget.\"\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/event",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"event"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/events",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"events"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get a single event",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/event/457b4aaa-d1fb-414e-afd2-ee6c3ef08264",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"event",
+								"457b4aaa-d1fb-414e-afd2-ee6c3ef08264"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update event",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"archived\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/event/457b4aaa-d1fb-414e-afd2-ee6c3ef08264",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"event",
+								"457b4aaa-d1fb-414e-afd2-ee6c3ef08264"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete event",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"archived\": true\r\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/event/457b4aaa-d1fb-414e-afd2-ee6c3ef08264",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"event",
+								"457b4aaa-d1fb-414e-afd2-ee6c3ef08264"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
