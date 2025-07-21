@@ -73,10 +73,9 @@ A simple event scheduling backend built with **TypeScript**, **Express.js**, and
 
 ```
 bash
-Copy
-Edit
 git clone https://github.com/your-username/event-scheduler-backend.git
 cd event-scheduler-backend
+
 ```
 
 ## run the project
@@ -90,17 +89,17 @@ cd Chronofy-server
 
 ## run the project
 
-``
+```
 bash
 npm install
 
-``
+```
 
 ## Create .env file
 
-``
+```
 .env
 PORT=5000
 NODE_ENV=development
 
-``
+```
