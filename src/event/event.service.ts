@@ -7,6 +7,7 @@ import { StatusCodes } from 'http-status-codes';
 import QueryBuilder, { QueryBuilderForDatabase } from '../builder/QueryBuilder';
 import { searchableFields } from './event.const';
 
+// crud operation for local memory like in an array starts
 const createEvent = async (payload: TEvent) => {
   const { title, date, time, notes } = payload;
   if (!title || !date || !time || !notes) {
@@ -31,6 +32,55 @@ const createEvent = async (payload: TEvent) => {
   return events[events.length - 1];
 };
 
+const getAllEvents = async (query: Record<string, unknown>) => {
+  const eventQuery = new QueryBuilder(events, query).filter().sort();
+  const result = eventQuery.getResult();
+  if (!result || result.length === 0) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'events not found');
+  }
+  return result;
+};
+
+const getASingleEvent = async (id: string) => {
+  const event = events.find((e) => e.id === id);
+  if (!event) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Event not found');
+  }
+  return event;
+};
+
+const updateEvent = async (id: string, payload: Partial<TEvent>) => {
+  const index = events.findIndex((event) => event.id === id);
+  if (index === -1) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Event not found');
+  }
+  const existingEvent = events[index];
+  const updatedEvent = {
+    ...existingEvent,
+    ...payload,
+    updatedAt: new Date(),
+  };
+  if (!updatedEvent) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'faild to update event');
+  }
+  events[index] = updatedEvent;
+  return events[index];
+};
+
+const deleteEvent = async (id: string) => {
+  const index = events.findIndex((event) => event.id === id);
+  if (index === -1) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Event not found');
+  }
+  const deletedEvent = events.splice(index, 1);
+  if (!deletedEvent.length) {
+    throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to delete event');
+  }
+  return deletedEvent[0];
+};
+// crud operation for local memory like in an array ends
+
+// crud operation in database like mongodb starts
 const createEvenetInDatabase = async (payload: TEvent) => {
   const eventCategory = categorizeEvent(
     `${payload?.title} ${payload?.notes || ''}`,
@@ -42,15 +92,6 @@ const createEvenetInDatabase = async (payload: TEvent) => {
   const result = await EventModel.create(payload);
   if (!result) {
     throw new AppError(StatusCodes.BAD_REQUEST, `faild to create event`);
-  }
-  return result;
-};
-
-const getAllEvents = async (query: Record<string, unknown>) => {
-  const eventQuery = new QueryBuilder(events, query).filter().sort();
-  const result = eventQuery.getResult();
-  if (!result || result.length === 0) {
-    throw new AppError(StatusCodes.NOT_FOUND, 'events not found');
   }
   return result;
 };
@@ -72,38 +113,12 @@ const getAllEventFromDatabase = async (query: Record<string, unknown>) => {
   return { meta, result };
 };
 
-const getASingleEvent = async (id: string) => {
-  const event = events.find((e) => e.id === id);
-  if (!event) {
-    throw new AppError(StatusCodes.NOT_FOUND, 'Event not found');
-  }
-  return event;
-};
-
 const getASingleEventFromDatabase = async (id: string) => {
   const result = await EventModel.findById(id);
   if (!result) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Event not found');
   }
   return result;
-};
-
-const updateEvent = async (id: string, payload: Partial<TEvent>) => {
-  const index = events.findIndex((event) => event.id === id);
-  if (index === -1) {
-    throw new AppError(StatusCodes.NOT_FOUND, 'Event not found');
-  }
-  const existingEvent = events[index];
-  const updatedEvent = {
-    ...existingEvent,
-    ...payload,
-    updatedAt: new Date(),
-  };
-  if (!updatedEvent) {
-    throw new AppError(StatusCodes.BAD_REQUEST, 'faild to update event');
-  }
-  events[index] = updatedEvent;
-  return events[index];
 };
 
 const updateEventFromdatabase = async (
@@ -120,18 +135,6 @@ const updateEventFromdatabase = async (
   }
 };
 
-const deleteEvent = async (id: string) => {
-  const index = events.findIndex((event) => event.id === id);
-  if (index === -1) {
-    throw new AppError(StatusCodes.NOT_FOUND, 'Event not found');
-  }
-  const deletedEvent = events.splice(index, 1);
-  if (!deletedEvent.length) {
-    throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to delete event');
-  }
-  return deletedEvent[0];
-};
-
 const deleteEventFromdatabase = async (id: string) => {
   const isEventExists = await EventModel.findById(id);
   if (!isEventExists) {
@@ -143,6 +146,7 @@ const deleteEventFromdatabase = async (id: string) => {
   }
   return null;
 };
+// crud operation in database like mongodb ends
 
 export const eventService = {
   createEvent,
