@@ -4,12 +4,10 @@ import { TEvent } from '../event/event.interface';
 class QueryBuilder {
   private data: TEvent[];
   private query: Record<string, unknown>;
-
   constructor(data: TEvent[], query: Record<string, unknown>) {
     this.data = data;
     this.query = query;
   }
-
   filter() {
     let result = this.data;
     if (this.query.category) {
@@ -18,22 +16,17 @@ class QueryBuilder {
     this.data = result;
     return this;
   }
-
   sort() {
     const sortBy = (this.query.sort as keyof TEvent) || 'date';
     const order = this.query.sortOrder === 'asc' ? 1 : -1;
-
     this.data.sort((a, b) => {
       const dateA = new Date(`${a.date} ${a.time}`);
       const dateB = new Date(`${b.date} ${b.time}`);
-
       if (sortBy === 'date' || sortBy === 'time') {
         return (dateA.getTime() - dateB.getTime()) * order;
       }
-
       const aValue = a[sortBy];
       const bValue = b[sortBy];
-
       if (
         aValue &&
         bValue &&
@@ -48,7 +41,6 @@ class QueryBuilder {
 
     return this;
   }
-
   getResult() {
     return this.data;
   }
@@ -76,24 +68,28 @@ export class QueryBuilderForDatabase<T> {
 
   filter() {
     const queryObject = { ...this.query };
-    const excludeFields = ['sort', 'sortOrder', 'limit', 'page'];
+    const excludeFields = ['sort', 'sortOrder', 'limit', 'page', 'searchTerm'];
     excludeFields.forEach((element) => delete queryObject[element]);
     this.modelQuery = this.modelQuery.find(queryObject);
     return this;
   }
   sort() {
     const sortOrder = this?.query?.sortOrder === 'desc' ? '-' : '';
-    const sortingData = this?.query?.sort
-      ? (this.query.sort as string).split(',')?.join(' ')
-      : '-createdAt';
-    let sort;
-    sort = sortingData || 'createdAt';
-    if (sortOrder) {
-      sort = `${sortOrder}${sortingData}`;
+    const sortBy = this?.query?.sort;
+
+    let sortFields = '';
+    if (sortBy === 'date-time') {
+      sortFields = sortOrder === '-' ? '-date -time' : 'date time';
+    } else if (sortBy) {
+      const customSort = (sortBy as string).split(',').join(' ');
+      sortFields = sortOrder + customSort;
+    } else {
+      sortFields = 'date time';
     }
-    this.modelQuery = this.modelQuery.sort(sort);
+    this.modelQuery = this.modelQuery.sort(sortFields);
     return this;
   }
+
   paginateQuery() {
     const limit = Number(this?.query?.limit) || 0;
     const page = Number(this?.query?.page) || 1;

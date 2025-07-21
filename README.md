@@ -23,7 +23,22 @@ A simple event scheduling backend built with **TypeScript**, **Express.js**, and
 
 ---
 
+---
+
+## 📌 Used Technology
+
+- TypeScript
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- Zod validation schema
+
+---
+
 ## 📁 API Endpoints
+
+<!-- this api is for local memory -->
 
 | Method   | Endpoint     | Description                            |
 | -------- | ------------ | -------------------------------------- |
@@ -33,6 +48,16 @@ A simple event scheduling backend built with **TypeScript**, **Express.js**, and
 | `PUT`    | `/event/:id` | Update archived status of an event     |
 | `DELETE` | `/event/:id` | Delete an event                        |
 
+<!-- this api is for database -->
+
+| Method   | Endpoint            | Description                            |
+| -------- | ------------------- | -------------------------------------- |
+| `GET`    | `/get-events`       | Get all events (sorted by date & time) |
+| `GET`    | `/get-event/:id`    | Get a single event by `id`             |
+| `POST`   | `/create-event`     | Create a new event                     |
+| `PUT`    | `/update-event/:id` | Update archived status of an event     |
+| `DELETE` | `/delete-event/:id` | Delete an event                        |
+
 ### ➕ Sample Event Schema (Request Body)
 
 ```json
@@ -40,7 +65,7 @@ A simple event scheduling backend built with **TypeScript**, **Express.js**, and
   "title": "Team Meeting",
   "date": "2025-08-15",
   "time": "14:30",
-  "notes": "Discuss quarterly performance"
+  "notes": "Discuss quarterly performance" (optional)
 }
 
 
@@ -103,3 +128,8 @@ PORT=5000
 NODE_ENV=development
 
 ```
+
+## eescription about used technology
+
+first I have used an array to store my events data. so that the data was saved in the device memory
+but after deploying there was a problem because the data durability was 0. every relode or every restart or every rebuild the server the cash data was gone. so I have used the database at last. you can follow the two method . I have provided the postman collection also to check the both system

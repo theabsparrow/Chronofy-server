@@ -10,114 +10,235 @@
 			"name": "event",
 			"item": [
 				{
-					"name": "create event",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": " {\r\n    \"title\": \"Vacation Planning\",\r\n    \"date\": \"2025-12-10\",\r\n    \"time\": \"20:00\",\r\n    \"notes\": \"Plan holiday trip details with family including travel and budget.\"\r\n  }",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "for database",
+					"item": [
+						{
+							"name": "create event in database",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"title\": \"Vacation Planning\",\r\n    \"date\": \"2025-12-10\",\r\n    \"time\": \"20:00\",\r\n    \"notes\": \"Plan holiday trip details with family including travel and budget.\"\r\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/create-event",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"create-event"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{baseURL}}/event",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"event"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get all events",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseURL}}/events",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"events"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get a single event",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseURL}}/event/457b4aaa-d1fb-414e-afd2-ee6c3ef08264",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"event",
-								"457b4aaa-d1fb-414e-afd2-ee6c3ef08264"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update event",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"archived\": true\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "gte a single event from database",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/get-event/687e2f5132db92c3f8295eb5",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"get-event",
+										"687e2f5132db92c3f8295eb5"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{baseURL}}/event/457b4aaa-d1fb-414e-afd2-ee6c3ef08264",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"event",
-								"457b4aaa-d1fb-414e-afd2-ee6c3ef08264"
-							]
+						{
+							"name": "get all events",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/get-events?category=Work",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"get-events"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "Work"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update event from database",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"archived\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/update-event/687e2f1a32db92c3f8295ead",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"update-event",
+										"687e2f1a32db92c3f8295ead"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get archived events",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/get-archived",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"get-archived"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "delete event",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"archived\": true\r\n}"
+					"name": "for local",
+					"item": [
+						{
+							"name": "create event",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"title\": \"Vacation Planning\",\r\n    \"date\": \"2025-12-10\",\r\n    \"time\": \"20:00\",\r\n    \"notes\": \"Plan holiday trip details with family including travel and budget.\"\r\n  }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/event",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"event"
+									]
+								}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{baseURL}}/event/457b4aaa-d1fb-414e-afd2-ee6c3ef08264",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"event",
-								"457b4aaa-d1fb-414e-afd2-ee6c3ef08264"
-							]
+						{
+							"name": "get all events",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/events",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"events"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get a single event",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseURL}}/event/457b4aaa-d1fb-414e-afd2-ee6c3ef08264",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"event",
+										"457b4aaa-d1fb-414e-afd2-ee6c3ef08264"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update event",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"archived\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/event/457b4aaa-d1fb-414e-afd2-ee6c3ef08264",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"event",
+										"457b4aaa-d1fb-414e-afd2-ee6c3ef08264"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete event",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"archived\": true\r\n}"
+								},
+								"url": {
+									"raw": "{{baseURL}}/event/457b4aaa-d1fb-414e-afd2-ee6c3ef08264",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"event",
+										"457b4aaa-d1fb-414e-afd2-ee6c3ef08264"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		}

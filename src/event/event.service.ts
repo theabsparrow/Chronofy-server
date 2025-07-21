@@ -113,6 +113,23 @@ const getAllEventFromDatabase = async (query: Record<string, unknown>) => {
   return { meta, result };
 };
 
+const getAllArchivedEvents = async (query: Record<string, unknown>) => {
+  const filter: Record<string, unknown> = {};
+  filter.archived = true;
+  query = { ...query, ...filter };
+  const eventQuery = new QueryBuilderForDatabase(EventModel.find(), query)
+    .search(searchableFields)
+    .filter()
+    .sort()
+    .paginateQuery();
+  const result = await eventQuery.modelQuery;
+  const meta = await eventQuery.countTotal();
+  if (!result) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'event not found');
+  }
+  return { meta, result };
+};
+
 const getASingleEventFromDatabase = async (id: string) => {
   const result = await EventModel.findById(id);
   if (!result) {
@@ -133,6 +150,7 @@ const updateEventFromdatabase = async (
   if (!result) {
     throw new AppError(StatusCodes.BAD_REQUEST, 'Failed to update event');
   }
+  return result;
 };
 
 const deleteEventFromdatabase = async (id: string) => {
@@ -159,4 +177,5 @@ export const eventService = {
   getASingleEventFromDatabase,
   updateEventFromdatabase,
   deleteEventFromdatabase,
+  getAllArchivedEvents,
 };

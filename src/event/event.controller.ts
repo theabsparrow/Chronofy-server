@@ -102,6 +102,19 @@ const getAllEventsFromDataabase = catchAsync(
   },
 );
 
+const getAllArchivedEvents = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const query = req.query;
+    const result = await eventService.getAllArchivedEvents(query);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'events are retrived successfully',
+      data: result,
+    });
+  },
+);
+
 const getASingleEventFromDatabase = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
@@ -154,4 +167,5 @@ export const eventController = {
   getASingleEventFromDatabase,
   updateEventFromdatabase,
   deleteEventFromDatabase,
+  getAllArchivedEvents,
 };
