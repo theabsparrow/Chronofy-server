@@ -103,14 +103,14 @@ const getAllEventFromDatabase = async (query: Record<string, unknown>) => {
   const eventQuery = new QueryBuilderForDatabase(EventModel.find(), query)
     .search(searchableFields)
     .filter()
-    .sort()
-    .paginateQuery();
+    .sort();
+
   const result = await eventQuery.modelQuery;
-  const meta = await eventQuery.countTotal();
+  // const meta = await eventQuery.countTotal();
   if (!result) {
     throw new AppError(StatusCodes.NOT_FOUND, 'event not found');
   }
-  return { meta, result };
+  return result;
 };
 
 const getAllArchivedEvents = async (query: Record<string, unknown>) => {
@@ -120,14 +120,14 @@ const getAllArchivedEvents = async (query: Record<string, unknown>) => {
   const eventQuery = new QueryBuilderForDatabase(EventModel.find(), query)
     .search(searchableFields)
     .filter()
-    .sort()
-    .paginateQuery();
+    .sort();
+
   const result = await eventQuery.modelQuery;
-  const meta = await eventQuery.countTotal();
+  // const meta = await eventQuery.countTotal();
   if (!result) {
     throw new AppError(StatusCodes.NOT_FOUND, 'event not found');
   }
-  return { meta, result };
+  return result;
 };
 
 const getASingleEventFromDatabase = async (id: string) => {
